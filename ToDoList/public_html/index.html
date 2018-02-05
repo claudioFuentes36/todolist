@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Inicio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
+        <!--script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script-->
+        <!--script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script-->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <!--script src="https://code.jquery.com/jquery-3.1.1.slim.js"></script-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ></script>
+        <link rel="shortcut icon" href="">
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf-8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+        <script language="php" src="../phpFiles/administracion.php"></script>
+    </head>   
+    <body>
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-1">
+                </div>
+                <div class="col-lg-10">
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <h1>Cosas por Hacer</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                    </div>
+                                    <!-- panel preview -->
+                                    <div class="col-sm-12">
+                                        <h4>Agregar nuevo pendiente</h4>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body form-horizontal payment-form">
+                                                <div class="form-group">
+                                                    <label for="concept" class="col-sm-3 control-label">Tarea</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="txtTarea" name="concept">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description" class="col-sm-3 control-label">Descripción</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text"  class="form-control" id="txtDescripcion" name="description">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="plazo" class="col-sm-3 control-label">fecha Plazo</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="date" class="form-control" id="txtFechaPlazo" name="date">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-1 text-right">
+                                                        <button type="button" class="btn btn-default preview-add-button" id="btnAgregar">
+                                                            <span class="glyphicon glyphicon-plus"></span> Agregar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>            
+                                    </div> <!-- / panel preview --> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <table id="tablaPrincipal" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>Tarea</th>
+                                            <th>Descripción</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Creación</th>
+                                            <th>Fecha Plazo</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="desarrolloTabla">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            var tPrinc = $('#tablaPrincipal').DataTable();
+                            //tPrinc.search('buscar').draw();
+
+
+                            $('#btnAgregar').on('click', function () {
+                                var tarea = $('#txtTarea').val();
+                                var descripcion = $('#txtDescripcion').val();
+                                var fechaPlazo = $('#txtFechaPlazo').val();
+                                var hoy = new Date();
+                                var estado = true;
+                                var botonScript = '<input type="button" value="Cambiar estado"/>';
+
+                                var nuevoEstado = estado ? "activo" : "inactivo"
+
+
+                                tPrinc.row.add([
+                                    tarea,
+                                    descripcion,
+                                    nuevoEstado,
+                                    hoy,
+                                    fechaPlazo,
+                                    botonScript
+                                ]).draw(false);
+                                /* var linea = '<tr>'+
+                                 '<td>'+tarea+'</td>'+
+                                 '<td>'+descripcion+'</td>'+
+                                 '<td>'+fechaPlazo+'</td>'+
+                                 '<td>'+hoy+'</td>'+
+                                 '<td>'+estado+'</td>'+
+                                 '<td>'+botonScript+'</td>'+
+                                 +'</tr>';
+                                 $('#desarrolloTabla').append(linea);  */
+                                //alert(hoy);
+                            });
+                        });
+
+                    </script>
+                    <script>
+
+
+                        $(function () {
+                            $('.preview-add-button').click(function () {
+                                var form_data = {};
+                                form_data["concept"] = $('.payment-form input[name="concept"]').val();
+                                form_data["description"] = $('.payment-form input[name="description"]').val();
+                                form_data["amount"] = parseFloat($('.payment-form input[name="amount"]').val()).toFixed(2);
+                                form_data["status"] = $('.payment-form #status option:selected').text();
+                                form_data["date"] = $('.payment-form input[name="date"]').val();
+                                form_data["remove-row"] = '<span class="glyphicon glyphicon-remove"></span>';
+                                var row = $('<tr></tr>');
+                                $.each(form_data, function (type, value) {
+                                    $('<td class="input-' + type + '"></td>').html(value).appendTo(row);
+                                });
+                                $('.preview-table > tbody:last').append(row);
+                                calc_total();
+                            });
+                        });
+                    </script>
+                    <script>
+
+                        function verFilas() {
+                            jQuery.ajax({
+                                url: 'phpFiles/Acceso.php',
+                                type: 'post',
+                                beforeSend: function () {
+                                    $('#lblFilas').html("buscando...");
+                                },
+                                success: function (response) {
+                                    $('#lblFilas').html(response);
+                                }
+                            });
+                        }
+                        function mostrarMensaje() {
+                            //var nombre = document.getElementById("tarea").value;
+                            //alert(nombre);
+                            var linea = "";
+                            linea = "<h1>esto es una prueba</h1>";
+                            var seccion = $('#tester').append(linea);
+                            seccion = seccion + linea;
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10">
+                <input type="button" onclick="verFilas();" value="ver"/>
+                <label id="lblFilas">aqui van las filas</label>
+            </div>
+        </div>
+    </body>
+</html>
